@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL13;
 
+import com.romejanic.javatale.gui.Color;
 import com.romejanic.javatale.io.Resources;
 import com.romejanic.javatale.math.Mat4;
 
@@ -200,6 +201,9 @@ public class Shader {
 			} else if(this.value instanceof Mat4) {
 				((Mat4)this.value).store(Shader.this.uniformMat4Buffer);
 				glUniformMatrix4fv(this.location, false, Shader.this.uniformMat4Buffer);
+			} else if(this.value instanceof Color) {
+				Color c = (Color)this.value;
+				glUniform4f(this.location, c.r, c.g, c.b, c.a);
 			} else if(this.isTexture()) {
 				glUniform1i(this.location, texUnit);
 				GL13.glActiveTexture(GL13.GL_TEXTURE0 + texUnit);
