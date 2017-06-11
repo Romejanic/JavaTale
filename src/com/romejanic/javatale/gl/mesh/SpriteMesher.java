@@ -5,6 +5,16 @@ import com.romejanic.javatale.gl.objects.VAOBuilder;
 
 public class SpriteMesher {
 
+	private static VAO fullSpriteCenteredMesh;
+	
+	public static VAO getFullSpriteAndCenteredMesh() {
+		if(fullSpriteCenteredMesh != null) {
+			return fullSpriteCenteredMesh;
+		}
+		fullSpriteCenteredMesh = createMesh(0f, 0f, 1f, 1f);
+		return fullSpriteCenteredMesh;
+	}
+	
 	public static VAO createMesh(float uMin, float vMin, float uMax, float vMax) {
 		float[] vertices = {
 			-0.5f, -0.5f, 0f,

@@ -11,6 +11,7 @@ public class Sprite {
 
 	public float posX   = 0f;
 	public float posY   = 0f;
+	public float zIndex = 0f;
 	public float scaleX = 1f;
 	public float scaleY = 1f;
 	public float rotation = 0f;
@@ -21,7 +22,7 @@ public class Sprite {
 	private VAO mesh;
 	
 	public Sprite(String spriteName) {
-		this.mesh = SpriteMesher.createMesh(0f, 0f, 1f, 1f);
+		this.mesh = SpriteMesher.getFullSpriteAndCenteredMesh();
 		this.sprite = Texture.get(spriteName);
 		
 		this.posX = 320f;
@@ -30,7 +31,7 @@ public class Sprite {
 	
 	public void render(Renderer renderer, Mat4 modelMat) {
 		modelMat.setIdentity()
-			.translate(posX, posY, 0f)
+			.translate(posX, posY, zIndex)
 			.scale(sprite.getWidth(), sprite.getHeight(), 0f)
 			.scale(scaleX, scaleY, 0f);
 		

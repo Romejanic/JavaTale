@@ -3,6 +3,7 @@ package com.romejanic.javatale.gl;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -18,8 +19,13 @@ public class Window {
 	private static int height = 480;
 	private static String title = "JavaTale";
 	
+	private static int mouseX = 0;
+	private static int mouseY = 0;
 	private static int fbWidth = 0;
 	private static int fbHeight = 0;
+	
+	private static DoubleBuffer doubleBufA = BufferUtils.createDoubleBuffer(1);
+	private static DoubleBuffer doubleBufB = BufferUtils.createDoubleBuffer(1);
 	
 	public static void create() throws Exception {
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -45,17 +51,23 @@ public class Window {
 		});
 		glfwShowWindow(window);
 		GL.createCapabilities();
-		
-		IntBuffer wb = BufferUtils.createIntBuffer(1);
-		IntBuffer hb = BufferUtils.createIntBuffer(1);
-		glfwGetFramebufferSize(window, wb, hb);
-		fbWidth = wb.get();
-		fbHeight = hb.get();
+
+		IntBuffer intBufA = BufferUtils.createIntBuffer(1);
+		IntBuffer intBufB = BufferUtils.createIntBuffer(1);
+		glfwGetFramebufferSize(window, intBufA, intBufB);
+		fbWidth = intBufA.get();
+		fbHeight = intBufB.get();
 	}
 	
 	public static void update() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+		
+		doubleBufA.clear();
+		doubleBufB.clear();
+		glfwGetCursorPos(window, doubleBufA, doubleBufB);
+		mouseX = (int)doubleBufA.get();
+		mouseY = getFramebufferHeight() - (int)doubleBufB.get();
 	}
 	
 	public static void destroy() {
@@ -64,6 +76,14 @@ public class Window {
 			glfwDestroyWindow(window);
 		}
 		glfwTerminate();
+	}
+	
+	public static int getMouseX() {
+		return mouseX;
+	}
+	
+	public static int getMouseY() {
+		return mouseY;
 	}
 	
 	public static int getFramebufferWidth() {

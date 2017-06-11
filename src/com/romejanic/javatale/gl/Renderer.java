@@ -6,7 +6,7 @@ import com.romejanic.javatale.gl.objects.Shader;
 import com.romejanic.javatale.gl.objects.Texture;
 import com.romejanic.javatale.gl.objects.VAOBuilder;
 import com.romejanic.javatale.gui.GuiScreen;
-import com.romejanic.javatale.gui.screens.GuiTest;
+import com.romejanic.javatale.gui.screens.GuiBattle;
 import com.romejanic.javatale.math.Mat4;
 import com.romejanic.javatale.math.Matrices;
 
@@ -22,8 +22,8 @@ public class Renderer {
 		glEnable(GL_CULL_FACE);
 		glDepthFunc(GL_LEQUAL);
 		glCullFace(GL_BACK);
-
-		screen = new GuiTest();
+		
+		screen = new GuiBattle();
 	}
 
 	public void render() {
