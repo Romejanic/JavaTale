@@ -1,21 +1,28 @@
 package com.romejanic.javatale;
 
+import com.romejanic.javatale.gl.Renderer;
 import com.romejanic.javatale.gl.Window;
 
 public class Javatale {
 
 	public static final Javatale instance = new Javatale();
 	
+	public Renderer renderer = new Renderer();
+	
 	private void init() throws Throwable {
 		System.out.println("Started up!");
+		
 		Window.create();
+		renderer.init();
 	}
 	
 	private void update() {
+		renderer.render();
 		Window.update();
 	}
 	
 	private void destroy() {
+		renderer.destroy();
 		Window.destroy();
 	}
 	

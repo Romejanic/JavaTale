@@ -9,6 +9,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
 
 public class Window {
 
@@ -27,7 +28,7 @@ public class Window {
 		}
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -43,6 +44,7 @@ public class Window {
 			fbWidth = w; fbHeight = h;
 		});
 		glfwShowWindow(window);
+		GL.createCapabilities();
 		
 		IntBuffer wb = BufferUtils.createIntBuffer(1);
 		IntBuffer hb = BufferUtils.createIntBuffer(1);
