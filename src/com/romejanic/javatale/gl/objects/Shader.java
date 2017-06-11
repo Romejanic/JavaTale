@@ -1,9 +1,14 @@
 package com.romejanic.javatale.gl.objects;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL13;
+
 import com.romejanic.javatale.io.Resources;
+import com.romejanic.javatale.math.Mat4;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
@@ -14,15 +19,41 @@ public class Shader {
 	private static final HashMap<String, Shader> shaders = new HashMap<String, Shader>();
 
 	private int program;
+	
+	private HashMap<String, UniformVar> uniforms = new HashMap<String, UniformVar>();
+	private FloatBuffer uniformMat4Buffer = BufferUtils.createFloatBuffer(16);
 
 	public void bind() {
 		glUseProgram(program);
+		uploadUniforms();
 	}
 
+	private void uploadUniforms() {
+		int texUnit = 0;
+		for(UniformVar var : uniforms.values()) {
+			var.upload(texUnit);
+			if(var.isTexture()) {
+				texUnit++;
+			}
+		}
+	}
+	
 	public void unbind() {
 		glUseProgram(0);
 	}
 
+	public UniformVar getUniform(String uniformName) {
+		if(uniforms.containsKey(uniformName)) {
+			return uniforms.get(uniformName);
+		}
+		UniformVar var = new UniformVar(glGetUniformLocation(program, uniformName));
+		if(!var.exists()) {
+			System.err.println("Uniform variable \"" + uniformName + "\" not found!");
+		}
+		uniforms.put(uniformName, var);
+		return var;
+	}
+	
 	public static Shader get(String name) {
 		if(shaders.containsKey(name)) {
 			return shaders.get(name);
@@ -91,6 +122,93 @@ public class Shader {
 		}
 		programs.clear();
 		shaders.clear();
+	}
+	
+	public class UniformVar {
+		
+		private int location;
+		private boolean isDirty;
+		private Object value;
+		
+		public UniformVar(int location) {
+			this.location = location;
+			this.isDirty = false;
+		}
+		
+		public void set(Object value) {
+			this.value = value;
+			this.isDirty = true;
+		}
+		
+		public Object get() {
+			return this.value;
+		}
+		
+		public boolean exists() {
+			return this.location > -1;
+		}
+		
+		public boolean isTexture() {
+			return this.value instanceof Texture;
+		}
+		
+		private void upload(int texUnit) {
+			if(!this.exists() || this.value == null || (!this.isTexture() && !this.isDirty)) {
+				return;
+			}
+			
+			if(this.value instanceof Float) {
+				glUniform1f(this.location, (Float)this.value);
+			} else if(this.value instanceof Integer) {
+				glUniform1i(this.location, (Integer)this.value);
+			} else if(this.value instanceof Float[]) {
+				Float[] arr = (Float[])this.value;
+				switch(arr.length) {
+				case 1:
+					glUniform1f(this.location, arr[0]);
+					break;
+				case 2:
+					glUniform2f(this.location, arr[0], arr[1]);
+					break;
+				case 3:
+					glUniform3f(this.location, arr[0], arr[1], arr[2]);
+					break;
+				case 4:
+					glUniform4f(this.location, arr[0], arr[1], arr[2], arr[3]);
+					break;
+				default:
+					break;
+				}
+			} else if(this.value instanceof Integer[]) {
+				Integer[] arr = (Integer[])this.value;
+				switch(arr.length) {
+				case 1:
+					glUniform1i(this.location, arr[0]);
+					break;
+				case 2:
+					glUniform2i(this.location, arr[0], arr[1]);
+					break;
+				case 3:
+					glUniform3i(this.location, arr[0], arr[1], arr[2]);
+					break;
+				case 4:
+					glUniform4i(this.location, arr[0], arr[1], arr[2], arr[3]);
+					break;
+				default:
+					break;
+				}
+			} else if(this.value instanceof Mat4) {
+				((Mat4)this.value).store(Shader.this.uniformMat4Buffer);
+				glUniformMatrix4fv(this.location, false, Shader.this.uniformMat4Buffer);
+			} else if(this.isTexture()) {
+				glUniform1i(this.location, texUnit);
+				GL13.glActiveTexture(GL13.GL_TEXTURE0 + texUnit);
+				((Texture)this.value).bind();
+			}
+			
+			this.isDirty = false;
+		}
+		
 	}
 
 }

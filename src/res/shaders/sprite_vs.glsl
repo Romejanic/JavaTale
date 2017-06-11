@@ -1,12 +1,14 @@
 #version 330 core
 
 layout(location = 0) in vec3 vertex;
+layout(location = 1) in vec2 texCoords;
 
-out float factor;
+uniform mat4 projMat;
+uniform mat4 modelMat;
+
+out vec2 uv;
 
 void main() {
-	gl_Position = vec4(vertex, 1.);
-	
-	vec2 pos = (gl_Position.xy*.5+.5);
-	factor = pos.x * pos.y;
+	gl_Position = projMat * modelMat * vec4(vertex, 1.);
+	uv = texCoords;
 }

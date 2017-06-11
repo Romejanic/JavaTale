@@ -18,6 +18,10 @@ public class VAO {
 		this.shader = shader;
 	}
 	
+	public Shader getShader() {
+		return shader;
+	}
+	
 	public void render() {
 		shader.bind();
 		glBindVertexArray(vao);
