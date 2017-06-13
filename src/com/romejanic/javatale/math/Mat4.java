@@ -27,6 +27,26 @@ public class Mat4 {
 		return this;
 	}
 	
+	public Mat4 rotateZ(float angle) {
+		double a = Math.toRadians((double)angle);
+		float  s = (float)Math.sin(a), c = (float)Math.cos(a);
+		
+		float m00 = m[0][0], m10 = m[1][0],
+			  m01 = m[0][1], m11 = m[1][1],
+			  m02 = m[0][2], m12 = m[1][2],
+			  m03 = m[0][3], m13 = m[1][3];
+		m[0][0] = m00 * c + m10 * s;
+		m[0][1] = m01 * c + m11 * s;
+		m[0][2] = m02 * c + m12 * s;
+		m[0][3] = m03 * c + m13 * s;
+		m[1][0] = m10 * c - m00 * s;
+		m[1][1] = m11 * c - m01 * s;
+		m[1][2] = m12 * c - m02 * s;
+		m[1][3] = m13 * c - m03 * s;
+		
+		return this;
+	}
+	
 	public Mat4 scale(float s) {
 		return scale(s, s, s);
 	}

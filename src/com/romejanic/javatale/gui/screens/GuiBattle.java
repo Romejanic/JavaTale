@@ -25,24 +25,26 @@ public class GuiBattle extends GuiScreen {
 		mercyBtn = this.addSprite(new Sprite("spr_mercybt_0"));
 		mercyBtn.posX = fightBtn.posX + 459f;
 		mercyBtn.posY = fightBtn.posY;
+		
+//		fightBtn.posY += 100f;
+//		fightBtn.pivotX = 0f;
+//		fightBtn.pivotY = 0f;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, int layer) {
 		if(layer < 0) {
-			fightBtn.sprite = Texture.get("spr_fightbt_" + (mouseOverSprite(fightBtn, mouseX, mouseY) ? "1" : "0"));
-			actBtn.sprite = Texture.get("spr_actbt_" + (mouseOverSprite(actBtn, mouseX, mouseY) ? "1" : "0"));
-			itemBtn.sprite = Texture.get("spr_itembt_" + (mouseOverSprite(itemBtn, mouseX, mouseY) ? "1" : "0"));
-			mercyBtn.sprite = Texture.get("spr_mercybt_" + (mouseOverSprite(mercyBtn, mouseX, mouseY) ? "1" : "0"));
+			fightBtn.sprite = Texture.get("spr_fightbt_" + (fightBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
+			actBtn.sprite = Texture.get("spr_actbt_" + (actBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
+			itemBtn.sprite = Texture.get("spr_itembt_" + (itemBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
+			mercyBtn.sprite = Texture.get("spr_mercybt_" + (mercyBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
+		
+//			float rot = 45f * (float)GLFW.glfwGetTime();
+//			fightBtn.rotation = rot;
+//			actBtn.rotation = rot;
+//			itemBtn.rotation = rot;
+//			mercyBtn.rotation = rot;
 		}
-	}
-	
-	public boolean mouseOverSprite(Sprite sprite, int mouseX, int mouseY) {
-		int minX = (int)(sprite.posX - ((float)(sprite.sprite.getWidth() / 2) * sprite.scaleX));
-		int minY = (int)(sprite.posY - ((float)(sprite.sprite.getHeight() / 2) * sprite.scaleY));
-		int maxX = (int)(sprite.posX + ((float)(sprite.sprite.getWidth() / 2) * sprite.scaleX));
-		int maxY = (int)(sprite.posY + ((float)(sprite.sprite.getHeight() / 2) * sprite.scaleY));
-		return mouseX >= minX && mouseY >= minY && mouseX <= maxX && mouseY <= maxY;
 	}
 	
 }
