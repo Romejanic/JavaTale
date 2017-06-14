@@ -1,7 +1,6 @@
 package com.romejanic.javatale.gui;
 
 import com.romejanic.javatale.gl.Renderer;
-import com.romejanic.javatale.gl.mesh.SpriteMesher;
 import com.romejanic.javatale.gl.objects.Shader;
 import com.romejanic.javatale.gl.objects.Texture;
 import com.romejanic.javatale.gl.objects.VAO;
@@ -21,17 +20,13 @@ public class Sprite {
 	public Color color = new Color(1f, 1f, 1f);
 	public Texture sprite;
 	
-	private VAO mesh;
-	
 	public Sprite(String spriteName) {
-		this.mesh = SpriteMesher.getFullSpriteAndCenteredMesh();
 		this.sprite = Texture.get(spriteName);
-		
 		this.posX = 320f;
 		this.posY = 240f;
 	}
 	
-	public void render(Renderer renderer, Mat4 modelMat) {
+	public void render(Renderer renderer, VAO mesh, Shader shader, Mat4 modelMat) {
 		float ppX = -(pivotX - 0.5f);
 		float ppY = pivotY - 0.5f;
 		modelMat.setIdentity()
@@ -41,12 +36,23 @@ public class Sprite {
 			.scale(sprite.getWidth(), sprite.getHeight(), 0f)
 			.scale(scaleX, scaleY, 0f);
 		
-		Shader s = this.mesh.getShader();
-		s.getUniform("projMat").set(renderer.getProjectionMatrix());
-		s.getUniform("modelMat").set(modelMat);
-		s.getUniform("sprite").set(sprite);
-		s.getUniform("tintColor").set(color);
-		this.mesh.render();
+		if(sprite != null) {
+			sprite.bind(0);
+		}
+		
+		shader.getUniform("modelMat").set(modelMat);
+		if(sprite != null) {
+			shader.getUniform("sprite").set(0);
+			shader.getUniform("useTexture").set(1);
+		} else {
+			shader.getUniform("useTexture").set(0);
+		}
+		shader.getUniform("tintColor").set(color);
+		mesh.draw();
+	}
+	
+	public void removeSprite() {
+		this.sprite = null;
 	}
 	
 	public boolean pointInside(int px, int py) {

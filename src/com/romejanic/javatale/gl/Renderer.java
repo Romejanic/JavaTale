@@ -22,8 +22,6 @@ public class Renderer {
 		glEnable(GL_CULL_FACE);
 		glDepthFunc(GL_LEQUAL);
 		glCullFace(GL_BACK);
-		
-		screen = new GuiBattle();
 	}
 
 	public void render() {
@@ -36,6 +34,8 @@ public class Renderer {
 
 		if(screen != null) {
 			screen.draw(this);
+		} else {
+			screen = new GuiBattle();
 		}
 	}
 

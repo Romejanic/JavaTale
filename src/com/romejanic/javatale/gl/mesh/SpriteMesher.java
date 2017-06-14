@@ -12,6 +12,7 @@ public class SpriteMesher {
 			return fullSpriteCenteredMesh;
 		}
 		fullSpriteCenteredMesh = createMesh(0f, 0f, 1f, 1f);
+		fullSpriteCenteredMesh.getShader().getUniform("useTexture").set(1);
 		return fullSpriteCenteredMesh;
 	}
 	

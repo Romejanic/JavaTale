@@ -22,18 +22,32 @@ public class VAO {
 		return shader;
 	}
 	
-	public void render() {
+	public VAO bind() {
 		shader.bind();
 		glBindVertexArray(vao);
 		for(int attrib : attribs) {
 			glEnableVertexAttribArray(attrib);
 		}
-		glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
+		return this;
+	}
+	
+	public VAO unbind() {
 		for(int attrib : attribs) {
 			glDisableVertexAttribArray(attrib);
 		}
 		glBindVertexArray(0);
 		shader.unbind();
+		return this;
+	}
+	
+	public void draw() {
+		glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
+	}
+	
+	public void render() {
+		bind();
+		draw();
+		unbind();
 	}
 	
 }

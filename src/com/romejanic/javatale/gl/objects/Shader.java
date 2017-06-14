@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL13;
 
 import com.romejanic.javatale.gui.Color;
 import com.romejanic.javatale.io.Resources;
 import com.romejanic.javatale.math.Mat4;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL11.glGetInteger;
 import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
@@ -43,6 +43,10 @@ public class Shader {
 		glUseProgram(0);
 	}
 
+	public boolean isActive() {
+		return glGetInteger(GL_CURRENT_PROGRAM) == program;
+	}
+	
 	public UniformVar getUniform(String uniformName) {
 		if(uniforms.containsKey(uniformName)) {
 			return uniforms.get(uniformName);
@@ -137,6 +141,16 @@ public class Shader {
 		}
 		
 		public void set(Object value) {
+			if(Shader.this.isActive()) {
+				if(isTexture()) {
+					System.err.println("Setting uniform textures not supported when shader is bound! Set as integer instead!");
+				} else {
+					this.value = value;
+					this.isDirty = true;
+					upload(0);
+				}
+				return;
+			}
 			this.value = value;
 			this.isDirty = true;
 		}
@@ -162,8 +176,8 @@ public class Shader {
 				glUniform1f(this.location, (Float)this.value);
 			} else if(this.value instanceof Integer) {
 				glUniform1i(this.location, (Integer)this.value);
-			} else if(this.value instanceof Float[]) {
-				Float[] arr = (Float[])this.value;
+			} else if(this.value instanceof float[] || this.value instanceof Float[]) {
+				float[] arr = (float[])this.value;
 				switch(arr.length) {
 				case 1:
 					glUniform1f(this.location, arr[0]);
@@ -180,8 +194,8 @@ public class Shader {
 				default:
 					break;
 				}
-			} else if(this.value instanceof Integer[]) {
-				Integer[] arr = (Integer[])this.value;
+			} else if(this.value instanceof int[] || this.value instanceof Integer[]) {
+				int[] arr = (int[])this.value;
 				switch(arr.length) {
 				case 1:
 					glUniform1i(this.location, arr[0]);
@@ -206,8 +220,7 @@ public class Shader {
 				glUniform4f(this.location, c.r, c.g, c.b, c.a);
 			} else if(this.isTexture()) {
 				glUniform1i(this.location, texUnit);
-				GL13.glActiveTexture(GL13.GL_TEXTURE0 + texUnit);
-				((Texture)this.value).bind();
+				((Texture)this.value).bind(texUnit);
 			}
 			
 			this.isDirty = false;

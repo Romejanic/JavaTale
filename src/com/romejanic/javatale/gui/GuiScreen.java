@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.romejanic.javatale.gl.Renderer;
 import com.romejanic.javatale.gl.Window;
+import com.romejanic.javatale.gl.mesh.SpriteMesher;
+import com.romejanic.javatale.gl.objects.Shader;
+import com.romejanic.javatale.gl.objects.VAO;
 import com.romejanic.javatale.math.Mat4;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -12,6 +15,7 @@ public abstract class GuiScreen {
 
 	private ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
 	private Mat4 spriteModelMat = new Mat4();
+	private float[] colorFloatArray = new float[4];
 	
 	public GuiScreen() {
 		init();
@@ -23,19 +27,52 @@ public abstract class GuiScreen {
 	}
 	
 	public void draw(Renderer renderer) {
-		drawScreen(Window.getMouseX(), Window.getMouseY(), -1);
+		drawScreen(renderer, Window.getMouseX(), Window.getMouseY(), -1);
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
+		VAO mesh = SpriteMesher.getFullSpriteAndCenteredMesh().bind();
+		Shader shader = mesh.getShader();
+		shader.getUniform("projMat").set(renderer.getProjectionMatrix());
+		
 		for(Sprite sprite : spriteList) {
-			sprite.render(renderer, spriteModelMat);
+			sprite.render(renderer, mesh,
+					shader, spriteModelMat);
 		}
+		
+		mesh.unbind();
 		glDisable(GL_BLEND);
 		
-		drawScreen(Window.getMouseX(), Window.getMouseY(), 1);
+		drawScreen(renderer, Window.getMouseX(), Window.getMouseY(), 1);
+	}
+	
+	protected void drawColoredQuad(Renderer renderer, int x, int y, int w, int h, float r, float g, float b, float a) {
+		VAO mesh = SpriteMesher.getFullSpriteAndCenteredMesh();
+		Shader shader = mesh.getShader();
+		
+		spriteModelMat.setIdentity()
+			.translate((float)x, (float)y, 0f)
+			.scale((float)w, (float)h, 0f);
+		
+		colorFloatArray[0] = r;
+		colorFloatArray[1] = g;
+		colorFloatArray[2] = b;
+		colorFloatArray[3] = a;
+		
+		shader.getUniform("useTexture").set(0);
+		shader.getUniform("projMat").set(renderer.getProjectionMatrix());
+		shader.getUniform("modelMat").set(spriteModelMat);
+		shader.getUniform("tintColor").set(colorFloatArray);
+		mesh.render();
+		shader.getUniform("useTexture").set(1);
+	}
+	
+	protected void drawColoredQuad(Renderer renderer, int x, int y, int w, int h, Color color) {
+		drawColoredQuad(renderer, x, y, w, h, color.r, color.g, color.b, color.a);
 	}
 	
 	public abstract void init();
-	public abstract void drawScreen(int mouseX, int mouseY, int layer);
+	public abstract void drawScreen(Renderer renderer, int mouseX, int mouseY, int layer);
 	
 }

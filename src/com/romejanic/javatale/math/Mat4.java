@@ -1,5 +1,6 @@
 package com.romejanic.javatale.math;
 
+import java.io.PrintStream;
 import java.nio.FloatBuffer;
 
 public class Mat4 {
@@ -73,6 +74,18 @@ public class Mat4 {
 			buf.put(m[r]);
 		}
 		return (FloatBuffer)buf.flip();
+	}
+	
+	public void print(PrintStream stream) {
+		stream.print("[");
+		for(int r = 0; r < 4; r++) {
+			for(int c = 0; c < 4; c++) {
+				stream.print(m[r][c] + " ");
+			}
+			stream.println();
+			stream.print(" ");
+		}
+		stream.println("]");
 	}
 	
 	public boolean equals(Object other) {

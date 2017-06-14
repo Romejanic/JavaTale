@@ -14,6 +14,7 @@ import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 
 public class Texture {
 
@@ -32,6 +33,11 @@ public class Texture {
 	
 	public void bind() {
 		glBindTexture(target, texture);
+	}
+	
+	public void bind(int textureUnit) {
+		glActiveTexture(GL_TEXTURE0 + textureUnit);
+		bind();
 	}
 	
 	public void unbind() {

@@ -1,8 +1,13 @@
 package com.romejanic.javatale.gui.screens;
 
+import com.romejanic.javatale.gl.Renderer;
+import com.romejanic.javatale.gl.Window;
 import com.romejanic.javatale.gl.objects.Texture;
+import com.romejanic.javatale.gui.Color;
 import com.romejanic.javatale.gui.GuiScreen;
 import com.romejanic.javatale.gui.Sprite;
+import com.romejanic.javatale.gui.animation.AnimatedFloat;
+import com.romejanic.javatale.math.Mathf;
 
 public class GuiBattle extends GuiScreen {
 	
@@ -10,6 +15,11 @@ public class GuiBattle extends GuiScreen {
 	private Sprite actBtn;
 	private Sprite itemBtn;
 	private Sprite mercyBtn;
+	
+	private int arenaWidth  = 565;
+	private int arenaHeight = 130;
+	
+	private AnimatedFloat arenaWidthFloat;
 	
 	@Override
 	public void init() {		
@@ -26,24 +36,32 @@ public class GuiBattle extends GuiScreen {
 		mercyBtn.posX = fightBtn.posX + 459f;
 		mercyBtn.posY = fightBtn.posY;
 		
+		arenaWidthFloat = new AnimatedFloat(565, 130, 0.6f);
+		arenaWidthFloat.startAnimating();
+		
 //		fightBtn.posY += 100f;
 //		fightBtn.pivotX = 0f;
 //		fightBtn.pivotY = 0f;
 	}
 	
 	@Override
-	public void drawScreen(int mouseX, int mouseY, int layer) {
+	public void drawScreen(Renderer renderer, int mouseX, int mouseY, int layer) {
 		if(layer < 0) {
 			fightBtn.sprite = Texture.get("spr_fightbt_" + (fightBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
 			actBtn.sprite = Texture.get("spr_actbt_" + (actBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
 			itemBtn.sprite = Texture.get("spr_itembt_" + (itemBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
 			mercyBtn.sprite = Texture.get("spr_mercybt_" + (mercyBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
-		
-//			float rot = 45f * (float)GLFW.glfwGetTime();
-//			fightBtn.rotation = rot;
-//			actBtn.rotation = rot;
-//			itemBtn.rotation = rot;
-//			mercyBtn.rotation = rot;
+			
+			arenaWidth = (int)arenaWidthFloat.animate();
+//			if(arenaWidthFloat.getAnimationProgress() >= 1f) {
+//				float min = arenaWidthFloat.getMinimum() == 565f ? 130f : 565f;
+//				float max = arenaWidthFloat.getMaximum() == 565f ? 130f : 565f;
+//				arenaWidthFloat.setRange(min, max);
+//				arenaWidthFloat.startAnimating();
+//			}
+		} else {
+			this.drawColoredQuad(renderer, 319, 160, arenaWidth+10, arenaHeight+10, Color.WHITE);
+			this.drawColoredQuad(renderer, 319, 160, arenaWidth, arenaHeight, Color.BLACK);
 		}
 	}
 	

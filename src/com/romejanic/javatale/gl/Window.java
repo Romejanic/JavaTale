@@ -24,6 +24,9 @@ public class Window {
 	private static int fbWidth = 0;
 	private static int fbHeight = 0;
 	
+	private static float lastFrame = 0f;
+	private static float delta = 1f;
+	
 	private static DoubleBuffer doubleBufA = BufferUtils.createDoubleBuffer(1);
 	private static DoubleBuffer doubleBufB = BufferUtils.createDoubleBuffer(1);
 	
@@ -57,11 +60,17 @@ public class Window {
 		glfwGetFramebufferSize(window, intBufA, intBufB);
 		fbWidth = intBufA.get();
 		fbHeight = intBufB.get();
+		
+		lastFrame = getTime();
 	}
 	
 	public static void update() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+		
+		float time = getTime();
+		delta = time - lastFrame;
+		lastFrame = time;
 		
 		doubleBufA.clear();
 		doubleBufB.clear();
@@ -92,6 +101,14 @@ public class Window {
 	
 	public static int getFramebufferHeight() {
 		return fbHeight;
+	}
+	
+	public static float getTime() {
+		return (float)glfwGetTime();
+	}
+	
+	public static float getDelta() {
+		return delta;
 	}
 	
 	public static boolean shouldClose() {
