@@ -5,8 +5,8 @@ import com.romejanic.javatale.math.Mathf;
 
 public class AnimatedFloat {
 
-	private float min;
-	private float max;
+	private float start;
+	private float end;
 	private float val;
 	
 	private float progress = 0f;
@@ -14,43 +14,46 @@ public class AnimatedFloat {
 	
 	private boolean isAnimating = false;
 	
-	public AnimatedFloat(float min, float max, float duration) {
-		this.min = min;
-		this.max = max;
-		this.val = min;
+	public AnimatedFloat(float start, float end, float duration) {
+		this.start = start;
+		this.end = end;
+		this.val = start;
 		
 		this.duration = duration;
 	}
 	
-	public float getMinimum() {
-		return min;
+	public float getStartValue() {
+		return start;
 	}
 	
-	public float getMaximum() {
-		return max;
+	public float getEndValue() {
+		return end;
 	}
 	
 	public float getValue() {
-		return Mathf.clamp(this.val, this.min, this.max);
+		return Mathf.clamp(this.val, this.start, this.end);
 	}
 	
-	public void setMinimum(float min) {
-		this.min = min;
+	public void setStartValue(float start) {
+		this.start = start;
 	}
 	
-	public void setMaximum(float max) {
-		this.max = max;
+	public void setEndValue(float end) {
+		this.end = end;
 	}
 	
-	public void setRange(float min, float max) {
-		this.min = min;
-		this.max = max;
+	public void setRange(float start, float end) {
+		if(this.isAnimating) {
+			this.stopAnimating();
+		}
+		this.start = start;
+		this.end = end;
 	}
 	
 	public float animate() {
 		if(this.isAnimating) {
 			progress += Window.getDelta();
-			val = Mathf.lerp(min, max, getAnimationProgress());
+			val = Mathf.lerp(start, end, getAnimationProgress());
 			if(progress >= duration) {
 				this.isAnimating = false;
 			}
@@ -76,7 +79,7 @@ public class AnimatedFloat {
 	}
 	
 	public void reset() {
-		val = min;
+		val = start;
 		progress = 0f;
 		isAnimating = false;
 	}

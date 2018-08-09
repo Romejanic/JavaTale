@@ -60,9 +60,9 @@ public class GuiBattle extends GuiScreen {
 
 	@Override
 	public void triggerAction(Button source) {
-		if(this.arenaWidthFloat.getMaximum() <= 130f) {
+		if(this.arenaWidthFloat.getEndValue() <= 130f) {
 			this.arenaWidthFloat.animateTo(565f);
-		} else if(this.arenaWidthFloat.getMaximum() >= 565f) {
+		} else if(this.arenaWidthFloat.getEndValue() >= 565f) {
 			this.arenaWidthFloat.animateTo(130f);
 		}
 	}
