@@ -22,16 +22,16 @@ public class GuiBattle extends GuiScreen {
 
 	@Override
 	public void init() {		
-		fightBtn = this.addSprite(new Button("spr_fightbt_0").setMouseOverSound("hover"));
+		fightBtn = this.addSprite(new Button("spr_fightbt_0"));
 		fightBtn.posX = 87f;
 		fightBtn.posY = 26f;
-		actBtn = this.addSprite(new Sprite("spr_actbt_0"));
+		actBtn = this.addSprite(new Button("spr_actbt_0"));
 		actBtn.posX = fightBtn.posX + 153f;
 		actBtn.posY = fightBtn.posY;
-		itemBtn = this.addSprite(new Sprite("spr_itembt_0"));
+		itemBtn = this.addSprite(new Button("spr_itembt_0"));
 		itemBtn.posX = fightBtn.posX + 306f;
 		itemBtn.posY = fightBtn.posY;
-		mercyBtn = this.addSprite(new Sprite("spr_mercybt_0"));
+		mercyBtn = this.addSprite(new Button("spr_mercybt_0"));
 		mercyBtn.posX = fightBtn.posX + 459f;
 		mercyBtn.posY = fightBtn.posY;
 

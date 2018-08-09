@@ -28,6 +28,9 @@ public class Sound {
 	}
 
 	private void load() {
+		if(!this.name.startsWith("music/") && !this.name.startsWith("sounds/")) {
+			throw new IllegalArgumentException("Sounds names must start with 'music/' or 'sounds/'!");
+		}
 		try {
 			stackPush();
 			IntBuffer channelsBuffer = stackMallocInt(1);
@@ -66,6 +69,11 @@ public class Sound {
 	}
 
 	public void play() {
+		play(false);
+	}
+	
+	public void play(boolean looping) {
+		alSourcei(source, AL_LOOPING, looping ? 1 : 0);
 		alSourcePlay(source);
 	}
 

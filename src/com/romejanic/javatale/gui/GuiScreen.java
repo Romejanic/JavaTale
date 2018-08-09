@@ -86,7 +86,7 @@ public abstract class GuiScreen implements GuiActionListener {
 	
 	public void setBattleMusic(String musicName) {
 		this.battleMusic = SoundManager.getSound(musicName);
-		this.battleMusic.play();
+		this.battleMusic.play(true);
 	}
 	
 	public void triggerAction(Button source) {}
