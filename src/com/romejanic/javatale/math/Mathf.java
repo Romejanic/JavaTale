@@ -3,6 +3,12 @@ package com.romejanic.javatale.math;
 public class Mathf {
 
 	public static float clamp(float x, float min, float max) {
+		if(min > max) {
+			float temp = min;
+			min = max;
+			max = temp;
+		}
+		
 		if(x < min) return min;
 		if(x > max) return max;
 		return x;

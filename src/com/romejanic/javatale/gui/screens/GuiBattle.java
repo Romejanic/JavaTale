@@ -35,7 +35,7 @@ public class GuiBattle extends GuiScreen {
 		mercyBtn.posX = fightBtn.posX + 459f;
 		mercyBtn.posY = fightBtn.posY;
 
-		arenaWidthFloat = new AnimatedFloat(565, 130, 0.6f);
+		arenaWidthFloat = new AnimatedFloat(130, 565, 0.6f);
 		arenaWidthFloat.startAnimating();
 
 		//		fightBtn.posY += 100f;
@@ -52,12 +52,6 @@ public class GuiBattle extends GuiScreen {
 			mercyBtn.sprite = Texture.get("spr_mercybt_" + (mercyBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
 
 			arenaWidth = (int)arenaWidthFloat.animate();
-			//			if(arenaWidthFloat.getAnimationProgress() >= 1f) {
-			//				float min = arenaWidthFloat.getMinimum() == 565f ? 130f : 565f;
-			//				float max = arenaWidthFloat.getMaximum() == 565f ? 130f : 565f;
-			//				arenaWidthFloat.setRange(min, max);
-			//				arenaWidthFloat.startAnimating();
-			//			}
 		} else {
 			this.drawColoredQuad(renderer, 319, 160, arenaWidth+10, arenaHeight+10, Color.WHITE);
 			this.drawColoredQuad(renderer, 319, 160, arenaWidth, arenaHeight, Color.BLACK);
@@ -66,7 +60,11 @@ public class GuiBattle extends GuiScreen {
 
 	@Override
 	public void triggerAction(Button source) {
-		System.out.println("GuiBattle.triggerAction(" + source.toString() + ")");
+		if(this.arenaWidthFloat.getMaximum() <= 130f) {
+			this.arenaWidthFloat.animateTo(565f);
+		} else if(this.arenaWidthFloat.getMaximum() >= 565f) {
+			this.arenaWidthFloat.animateTo(130f);
+		}
 	}
 
 }

@@ -67,8 +67,8 @@ public class AnimatedFloat {
 	}
 	
 	public void startAnimating() {
-		isAnimating = true;
 		reset();
+		isAnimating = true;
 	}
 	
 	public void stopAnimating() {
@@ -79,6 +79,11 @@ public class AnimatedFloat {
 		val = min;
 		progress = 0f;
 		isAnimating = false;
+	}
+	
+	public void animateTo(float value) {
+		this.setRange(this.val, value);
+		this.startAnimating();
 	}
 	
 }
