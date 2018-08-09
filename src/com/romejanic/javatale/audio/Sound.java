@@ -41,10 +41,10 @@ public class Sound {
 
 			ByteBuffer bufferData   = Resources.readFileToBuffer(this.name + ".ogg");
 			ShortBuffer audioBuffer = stb_vorbis_decode_memory(bufferData, channelsBuffer, sampleRateBuffer);
-
+			
 			int channels = channelsBuffer.get();
 			int sampleRate = sampleRateBuffer.get();
-
+			
 			stackPop();
 			stackPop();
 

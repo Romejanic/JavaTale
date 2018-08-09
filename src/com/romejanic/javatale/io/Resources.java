@@ -11,15 +11,19 @@ import org.lwjgl.BufferUtils;
 
 public class Resources {
 
+	private static ResourceProvider currentMod = null;
+	private static final ClasspathResourceProvider classpathProvider = new ClasspathResourceProvider();
+
 	public static InputStream getResource(String resourcePath) throws FileNotFoundException {
-		resourcePath = "/res" + (resourcePath.startsWith("/") ? "" : "/") + resourcePath;
-		InputStream stream = Resources.class.getResourceAsStream(resourcePath);
-		if(stream == null) {
-			throw new FileNotFoundException(resourcePath);
+		if(currentMod != null) {
+			InputStream in = currentMod.getResourceSafe(resourcePath); // mod resources have top priority
+			if(in != null) {
+				return in;
+			}
 		}
-		return stream;
+		return classpathProvider.getResource(resourcePath); // fallback on the classpath resources
 	}
-	
+
 	public static String readFile(String resourcePath) throws Exception {
 		InputStream stream = getResource(resourcePath);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -30,7 +34,7 @@ public class Resources {
 		reader.close();
 		return sb.toString().trim();
 	}
-	
+
 	public static ByteBuffer readFileToBuffer(String resourcePath) throws Exception {
 		InputStream in = getResource(resourcePath);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -45,4 +49,11 @@ public class Resources {
 		return (ByteBuffer)buf.put(data).flip();
 	}
 	
+	public static void setCurrentModResources(ResourceProvider provider) {
+		if(provider instanceof ClasspathResourceProvider) {
+			throw new IllegalArgumentException("You cannot use the Classpath Provider as a mod provider.");
+		}
+		currentMod = provider;
+	}
+
 }
