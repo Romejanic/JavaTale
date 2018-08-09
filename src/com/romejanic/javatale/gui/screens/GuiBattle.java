@@ -1,13 +1,11 @@
 package com.romejanic.javatale.gui.screens;
 
 import com.romejanic.javatale.gl.Renderer;
-import com.romejanic.javatale.gl.Window;
 import com.romejanic.javatale.gl.objects.Texture;
 import com.romejanic.javatale.gui.Color;
 import com.romejanic.javatale.gui.GuiScreen;
 import com.romejanic.javatale.gui.Sprite;
 import com.romejanic.javatale.gui.animation.AnimatedFloat;
-import com.romejanic.javatale.math.Mathf;
 
 public class GuiBattle extends GuiScreen {
 	
