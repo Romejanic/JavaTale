@@ -106,7 +106,7 @@ public class Shader {
 		int shader = -1;
 		try {
 			shader = glCreateShader(type);
-			glShaderSource(shader, Resources.readFile("/res/shaders/" + src + ".glsl"));
+			glShaderSource(shader, Resources.readFile("shaders/" + src + ".glsl"));
 			glCompileShader(shader);
 			if(glGetShaderi(shader, GL_COMPILE_STATUS) == GL_FALSE) {
 				String log = glGetShaderInfoLog(shader, glGetShaderi(shader, GL_INFO_LOG_LENGTH));

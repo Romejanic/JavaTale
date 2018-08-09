@@ -22,7 +22,7 @@ public class GuiBattle extends GuiScreen {
 
 	@Override
 	public void init() {		
-		fightBtn = this.addSprite(new Button("spr_fightbt_0"));
+		fightBtn = this.addSprite(new Button("spr_fightbt_0").setMouseOverSound("hover"));
 		fightBtn.posX = 87f;
 		fightBtn.posY = 26f;
 		actBtn = this.addSprite(new Sprite("spr_actbt_0"));
@@ -38,9 +38,7 @@ public class GuiBattle extends GuiScreen {
 		arenaWidthFloat = new AnimatedFloat(130, 565, 0.6f);
 		arenaWidthFloat.startAnimating();
 
-		//		fightBtn.posY += 100f;
-		//		fightBtn.pivotX = 0f;
-		//		fightBtn.pivotY = 0f;
+		this.setBattleMusic("music/mus_battle1");
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.romejanic.javatale.gl.objects;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -8,6 +7,7 @@ import java.util.HashMap;
 
 import org.lwjgl.BufferUtils;
 
+import com.romejanic.javatale.io.Resources;
 import com.romejanic.javatale.util.ArrayConverter;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
@@ -60,10 +60,7 @@ public class Texture {
 		try {
 			t.bind();
 			
-			InputStream stream = Texture.class.getResourceAsStream("/res/textures/" + textureName + ".png");
-			if(stream == null) {
-				throw new FileNotFoundException("/res/textures/" + textureName + ".png");
-			}
+			InputStream stream = Resources.getResource("textures/" + textureName + ".png");
 			PNGDecoder png = new PNGDecoder(stream);
 			t.width = png.getWidth(); t.height = png.getHeight();
 			

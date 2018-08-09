@@ -2,6 +2,8 @@ package com.romejanic.javatale.gui;
 
 import java.util.ArrayList;
 
+import com.romejanic.javatale.audio.Sound;
+import com.romejanic.javatale.audio.SoundManager;
 import com.romejanic.javatale.gl.Renderer;
 import com.romejanic.javatale.gl.Window;
 import com.romejanic.javatale.gl.mesh.SpriteMesher;
@@ -16,6 +18,8 @@ public abstract class GuiScreen implements GuiActionListener {
 	private ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
 	private Mat4 spriteModelMat = new Mat4();
 	private float[] colorFloatArray = new float[4];
+	
+	private Sound battleMusic;
 	
 	public GuiScreen() {
 		init();
@@ -46,8 +50,7 @@ public abstract class GuiScreen implements GuiActionListener {
 					((Button)sprite).onButtonClicked();
 				}
 			}
-			sprite.render(renderer, mesh,
-					shader, spriteModelMat);
+			sprite.render(renderer, mesh, shader, spriteModelMat, mouseX, mouseY);
 		}
 		
 		mesh.unbind();
@@ -79,6 +82,11 @@ public abstract class GuiScreen implements GuiActionListener {
 	
 	protected void drawColoredQuad(Renderer renderer, int x, int y, int w, int h, Color color) {
 		drawColoredQuad(renderer, x, y, w, h, color.r, color.g, color.b, color.a);
+	}
+	
+	public void setBattleMusic(String musicName) {
+		this.battleMusic = SoundManager.getSound(musicName);
+		this.battleMusic.play();
 	}
 	
 	public void triggerAction(Button source) {}

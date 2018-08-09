@@ -1,5 +1,6 @@
 package com.romejanic.javatale;
 
+import com.romejanic.javatale.audio.SoundManager;
 import com.romejanic.javatale.gl.Renderer;
 import com.romejanic.javatale.gl.Window;
 
@@ -13,6 +14,7 @@ public class Javatale {
 		System.out.println("Started up!");
 		
 		Window.create();
+		SoundManager.init();
 		renderer.init();
 	}
 	
@@ -23,6 +25,7 @@ public class Javatale {
 	
 	private void destroy() {
 		renderer.destroy();
+		SoundManager.destroy();
 		Window.destroy();
 	}
 	
