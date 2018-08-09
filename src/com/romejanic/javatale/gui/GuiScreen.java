@@ -30,7 +30,8 @@ public abstract class GuiScreen implements GuiActionListener {
 	}
 	
 	public void draw(Renderer renderer) {
-		drawScreen(renderer, Window.getMouseX(), Window.getMouseY(), -1);
+		int mouseX = Window.getMouseX(), mouseY = Window.getMouseY();
+		drawScreen(renderer, mouseX, mouseY, -1);
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -41,7 +42,7 @@ public abstract class GuiScreen implements GuiActionListener {
 		
 		for(Sprite sprite : spriteList) {
 			if(sprite instanceof Button) {
-				if(sprite.pointInside(Window.getMouseX(), Window.getMouseY()) && Window.isMouseButtonPressed(0)) {
+				if(sprite.pointInside(mouseX, mouseY) && Window.isMouseButtonPressed(0)) {
 					((Button)sprite).onButtonClicked();
 				}
 			}
@@ -52,7 +53,7 @@ public abstract class GuiScreen implements GuiActionListener {
 		mesh.unbind();
 		glDisable(GL_BLEND);
 		
-		drawScreen(renderer, Window.getMouseX(), Window.getMouseY(), 1);
+		drawScreen(renderer, mouseX, mouseY, 1);
 	}
 	
 	protected void drawColoredQuad(Renderer renderer, int x, int y, int w, int h, float r, float g, float b, float a) {
