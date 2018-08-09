@@ -11,7 +11,7 @@ import com.romejanic.javatale.math.Mat4;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public abstract class GuiScreen {
+public abstract class GuiScreen implements GuiActionListener {
 
 	private ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
 	private Mat4 spriteModelMat = new Mat4();
@@ -23,6 +23,9 @@ public abstract class GuiScreen {
 	
 	public Sprite addSprite(Sprite sprite) {
 		this.spriteList.add(sprite);
+		if(sprite instanceof Button) {
+			((Button)sprite).setActionListener(this);
+		}
 		return sprite;
 	}
 	
@@ -37,6 +40,11 @@ public abstract class GuiScreen {
 		shader.getUniform("projMat").set(renderer.getProjectionMatrix());
 		
 		for(Sprite sprite : spriteList) {
+			if(sprite instanceof Button) {
+				if(sprite.pointInside(Window.getMouseX(), Window.getMouseY()) && Window.isMouseButtonPressed(0)) {
+					((Button)sprite).onButtonClicked();
+				}
+			}
 			sprite.render(renderer, mesh,
 					shader, spriteModelMat);
 		}
@@ -71,6 +79,8 @@ public abstract class GuiScreen {
 	protected void drawColoredQuad(Renderer renderer, int x, int y, int w, int h, Color color) {
 		drawColoredQuad(renderer, x, y, w, h, color.r, color.g, color.b, color.a);
 	}
+	
+	public void triggerAction(Button source) {}
 	
 	public abstract void init();
 	public abstract void drawScreen(Renderer renderer, int mouseX, int mouseY, int layer);

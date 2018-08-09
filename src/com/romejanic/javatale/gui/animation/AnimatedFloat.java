@@ -31,7 +31,7 @@ public class AnimatedFloat {
 	}
 	
 	public float getValue() {
-		return val;
+		return Mathf.clamp(this.val, this.min, this.max);
 	}
 	
 	public void setMinimum(float min) {

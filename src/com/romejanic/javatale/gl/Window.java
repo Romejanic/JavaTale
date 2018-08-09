@@ -29,6 +29,8 @@ public class Window {
 	
 	private static DoubleBuffer doubleBufA = BufferUtils.createDoubleBuffer(1);
 	private static DoubleBuffer doubleBufB = BufferUtils.createDoubleBuffer(1);
+	private static boolean[] mouseButtonStates  = new boolean[2];
+	private static boolean[] mouseButtonPressed = new boolean[mouseButtonStates.length];
 	
 	public static void create() throws Exception {
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -77,6 +79,16 @@ public class Window {
 		glfwGetCursorPos(window, doubleBufA, doubleBufB);
 		mouseX = (int)doubleBufA.get();
 		mouseY = getFramebufferHeight() - (int)doubleBufB.get();
+		
+		for(int i = 0; i < mouseButtonStates.length; i++) {
+			boolean down = isMouseButtonDown(i);
+			if(down && !mouseButtonStates[i]) {
+				mouseButtonPressed[i] = true;
+			} else {
+				mouseButtonPressed[i] = false;
+			}
+			mouseButtonStates[i] = down;
+		}
 	}
 	
 	public static void destroy() {
@@ -93,6 +105,21 @@ public class Window {
 	
 	public static int getMouseY() {
 		return mouseY;
+	}
+	
+	public static boolean isMouseButtonDown(int button) {
+		return glfwGetMouseButton(window, button) == GLFW_PRESS;
+	}
+	
+	public static boolean isMouseButtonPressed(int button) {
+		if(button >= mouseButtonStates.length) {
+			return isMouseButtonDown(button);
+		}
+		return mouseButtonPressed[button];
+	}
+	
+	public static boolean isMouseButtonUp(int button) {
+		return !isMouseButtonDown(button);
 	}
 	
 	public static int getFramebufferWidth() {
