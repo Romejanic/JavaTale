@@ -22,20 +22,20 @@ public class GuiBattle extends GuiScreen {
 
 	@Override
 	public void init() {		
-		fightBtn = this.addSprite(new Button("spr_fightbt_0"));
+		fightBtn = this.addSprite(new Button("fight", "spr_fightbt_0"));
 		fightBtn.posX = 87f;
 		fightBtn.posY = 26f;
-		actBtn = this.addSprite(new Button("spr_actbt_0"));
+		actBtn = this.addSprite(new Button("act", "spr_actbt_0"));
 		actBtn.posX = fightBtn.posX + 153f;
 		actBtn.posY = fightBtn.posY;
-		itemBtn = this.addSprite(new Button("spr_itembt_0"));
+		itemBtn = this.addSprite(new Button("item", "spr_itembt_0"));
 		itemBtn.posX = fightBtn.posX + 306f;
 		itemBtn.posY = fightBtn.posY;
-		mercyBtn = this.addSprite(new Button("spr_mercybt_0"));
+		mercyBtn = this.addSprite(new Button("mercy", "spr_mercybt_0"));
 		mercyBtn.posX = fightBtn.posX + 459f;
 		mercyBtn.posY = fightBtn.posY;
 
-		arenaWidthFloat = new AnimatedFloat(130, 565, 0.6f);
+		arenaWidthFloat = new AnimatedFloat(130, 565, 0.4f);
 		arenaWidthFloat.startAnimating();
 
 		this.setBattleMusic("music/mus_battle1");
@@ -57,11 +57,17 @@ public class GuiBattle extends GuiScreen {
 	}
 
 	@Override
-	public void triggerAction(Button source) {
-		if(this.arenaWidthFloat.getEndValue() <= 130f) {
-			this.arenaWidthFloat.animateTo(565f);
-		} else if(this.arenaWidthFloat.getEndValue() >= 565f) {
-			this.arenaWidthFloat.animateTo(130f);
+	public void triggerAction(String source) {
+		switch(source) {
+		case "fight":
+			if(this.arenaWidthFloat.getEndValue() <= 130f) {
+				this.arenaWidthFloat.animateTo(565f);
+			} else if(this.arenaWidthFloat.getEndValue() >= 565f) {
+				this.arenaWidthFloat.animateTo(130f);
+			}
+			break;
+		default:
+			System.out.println("Button " + source + " was pressed");
 		}
 	}
 

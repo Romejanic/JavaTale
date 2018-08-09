@@ -89,7 +89,7 @@ public abstract class GuiScreen implements GuiActionListener {
 		this.battleMusic.play(true);
 	}
 	
-	public void triggerAction(Button source) {}
+	public void triggerAction(String source) {}
 	
 	public abstract void init();
 	public abstract void drawScreen(Renderer renderer, int mouseX, int mouseY, int layer);

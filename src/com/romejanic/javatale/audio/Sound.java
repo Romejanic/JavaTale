@@ -20,7 +20,9 @@ public class Sound {
 
 	protected Sound(String name) {
 		this.name = name;
-		this.load();
+		if(this.name != null) {
+			this.load();
+		}
 	}
 
 	public String getName() {
@@ -71,7 +73,7 @@ public class Sound {
 	public void play() {
 		play(false);
 	}
-	
+
 	public void play(boolean looping) {
 		alSourcei(source, AL_LOOPING, looping ? 1 : 0);
 		alSourcePlay(source);

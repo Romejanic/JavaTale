@@ -5,11 +5,14 @@ import com.romejanic.javatale.audio.SoundManager;
 
 public class Button extends Sprite {
 
+	public final String identifier;
+	
 	private GuiActionListener actionListener;
 	private Sound pressedSound;
 	
-	public Button(String spriteName) {
+	public Button(String identifier, String spriteName) {
 		super(spriteName);
+		this.identifier = identifier;
 		this.setMouseOverSound("sounds/menumove");
 		this.setPressedSound("sounds/menuconfirm");
 	}
@@ -18,7 +21,7 @@ public class Button extends Sprite {
 		if(this.pressedSound != null) {
 			this.pressedSound.play();
 		}
-		this.actionListener.triggerAction(this);
+		this.actionListener.triggerAction(this.identifier);
 	}
 	
 	public Button setPressedSound(String sound) {
