@@ -4,6 +4,7 @@ import com.romejanic.javatale.gl.Renderer;
 import com.romejanic.javatale.gl.objects.Texture;
 import com.romejanic.javatale.gui.Button;
 import com.romejanic.javatale.gui.Color;
+import com.romejanic.javatale.gui.GuiLayer;
 import com.romejanic.javatale.gui.GuiScreen;
 import com.romejanic.javatale.gui.Sprite;
 import com.romejanic.javatale.gui.animation.AnimatedFloat;
@@ -42,17 +43,22 @@ public class GuiBattle extends GuiScreen {
 	}
 
 	@Override
-	public void drawScreen(Renderer renderer, int mouseX, int mouseY, int layer) {
-		if(layer < 0) {
+	public void drawScreen(Renderer renderer, int mouseX, int mouseY, GuiLayer layer) {
+		switch(layer) {
+		case SPRITES:
 			fightBtn.sprite = Texture.get("spr_fightbt_" + (fightBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
 			actBtn.sprite = Texture.get("spr_actbt_" + (actBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
 			itemBtn.sprite = Texture.get("spr_itembt_" + (itemBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
 			mercyBtn.sprite = Texture.get("spr_mercybt_" + (mercyBtn.pointInside(mouseX, mouseY) ? "1" : "0"));
 
 			arenaWidth = (int)arenaWidthFloat.animate();
-		} else {
+			break;
+		case QUADS:
 			this.drawColoredQuad(renderer, 319, 160, arenaWidth+10, arenaHeight+10, Color.WHITE);
 			this.drawColoredQuad(renderer, 319, 160, arenaWidth, arenaHeight, Color.BLACK);
+			break;
+		default:
+			break;
 		}
 	}
 

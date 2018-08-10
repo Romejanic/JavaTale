@@ -35,13 +35,13 @@ public abstract class GuiScreen implements GuiActionListener {
 	
 	public void draw(Renderer renderer) {
 		int mouseX = Window.getMouseX(), mouseY = Window.getMouseY();
-		drawScreen(renderer, mouseX, mouseY, -1);
-		
+		VAO mesh = SpriteMesher.getFullSpriteAndCenteredMesh().bind();
+		Shader shader = mesh.getShader();
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-		VAO mesh = SpriteMesher.getFullSpriteAndCenteredMesh().bind();
-		Shader shader = mesh.getShader();
+		// DRAW SPRITE LAYER //
+		drawScreen(renderer, mouseX, mouseY, GuiLayer.SPRITES);
 		shader.getUniform("projMat").set(renderer.getProjectionMatrix());
 		
 		for(Sprite sprite : spriteList) {
@@ -53,10 +53,11 @@ public abstract class GuiScreen implements GuiActionListener {
 			sprite.render(renderer, mesh, shader, spriteModelMat, mouseX, mouseY);
 		}
 		
-		mesh.unbind();
-		glDisable(GL_BLEND);
+		// DRAW 
+		drawScreen(renderer, mouseX, mouseY, GuiLayer.QUADS);
 		
-		drawScreen(renderer, mouseX, mouseY, 1);
+		glDisable(GL_BLEND);
+		mesh.unbind();
 	}
 	
 	protected void drawColoredQuad(Renderer renderer, int x, int y, int w, int h, float r, float g, float b, float a) {
@@ -76,7 +77,7 @@ public abstract class GuiScreen implements GuiActionListener {
 		shader.getUniform("projMat").set(renderer.getProjectionMatrix());
 		shader.getUniform("modelMat").set(spriteModelMat);
 		shader.getUniform("tintColor").set(colorFloatArray);
-		mesh.render();
+		mesh.draw();
 		shader.getUniform("useTexture").set(1);
 	}
 	
@@ -92,6 +93,6 @@ public abstract class GuiScreen implements GuiActionListener {
 	public void triggerAction(String source) {}
 	
 	public abstract void init();
-	public abstract void drawScreen(Renderer renderer, int mouseX, int mouseY, int layer);
+	public abstract void drawScreen(Renderer renderer, int mouseX, int mouseY, GuiLayer layer);
 	
 }
