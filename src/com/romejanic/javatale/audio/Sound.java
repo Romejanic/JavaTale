@@ -3,7 +3,7 @@ package com.romejanic.javatale.audio;
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.stb.STBVorbis.*;
 import static org.lwjgl.system.MemoryStack.*;
-import static org.lwjgl.system.libc.Stdlib.*;
+import static org.lwjgl.system.libc.LibCStdlib.*;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
